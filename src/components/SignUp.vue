@@ -1,19 +1,37 @@
 <template>
 	<div class="sign-up">
 		<p>Let's create a new account!</p>
-		<input type="text" placeholder="Email"><br>
-		<button>Sign Up</button>
+		<input type="text" placeholder="Name" v-model="name"/><br><br>
+		<input type="email" placeholder="Email" v-model="user"/><br><br>
+		<input type="password" placeholder="Password" v-model="pass"/><br><br>
+		<button @click="submitNewUser()">Sign Up</button>
 		<span>or go back to <router-link to="/login">login</router-link>.</span>
 	</div>
 </template>
 
 <script>
+	import {usersRef} from '../firebase';
 	export default{
 		name: 'signUp',
 		data: function(){
-			return{}
+			return{
+				name: ''
+			}
 		},
-		methods: {}
+		firebase:{
+    users:usersRef
+  },
+  methods:{
+    submitNewUser(){
+      usersRef.push({name:this.name, user:this.user, pass:this.pass, edit:false})
+      this.name = ''
+      this.user = ''
+      this.pass = ''
+    },
+    removeUser(key){
+      usersRef.child(key).remove();
+    }
+  }
 	}
 </script>
 
